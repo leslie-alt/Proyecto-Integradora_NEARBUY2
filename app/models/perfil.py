@@ -14,7 +14,7 @@ class perfilCreate(BaseModel):
     telefono: str = Field(min_length=10, max_length=15)
     fecha_registro: datetime = Field(default_factory=datetime.now)
     rol: str = Field(min_length=3, max_length=50)
-    contrasena: str = Field(min_length=6)
+    contrasena: str = Field(min_length=6, alias="contraseña")
 
 
    
@@ -25,12 +25,12 @@ class perfilCreate(BaseModel):
 
 
 class perfilUpdate(BaseModel):
+    id: UUID
     nombre_usuario: str | None = Field(default=None, min_length=3, max_length=50)
     telefono: str | None = Field(default=None, min_length=10, max_length=15)
     fecha_registro: datetime | None = Field(default=None)
     rol: str | None = Field(default=None, min_length=3, max_length=50)
-    contrasena: str | None = Field(default=None, min_length=6)
-
+    contrasena: str = Field(alias="contraseña")
     
     @field_validator("fecha_registro")
     @classmethod
@@ -44,10 +44,11 @@ class perfilOut(BaseModel):
     telefono: str
     fecha_registro: datetime
     rol: str
-    contrasena: str
+    contrasena: str = Field(alias="contraseña")
 
     class Config:
         orm_mode = True
+        populate_by_name = True
 
 
 class perfilList(BaseModel):

@@ -14,11 +14,11 @@ def listar_productos(
     limit: int = Query(10, ge=1),
     offset: int = Query(0, ge=0)
 ):
-    return list_producto(limit, offset)
+    return list_producto(offset, limit)
 
 
 @router.get("/{product_id}", response_model=ProductoOut, name="obtener_producto")
-def api_get_product(product_id: UUID = Path(...)):
+def api_get_product(product_id: int = Path(...)):
     return get_producto(product_id)
 
 @router.post("", response_model=ProductoOut, name="crear_producto")
@@ -28,9 +28,9 @@ def api_create_product(body: ProductoCreate):
 
 
 @router.delete("/{product_id}", name="eliminar_producto")
-def api_delete_product(product_id: UUID):
+def api_delete_product(product_id: int):
     return delete_producto(product_id)
 
 @router.put("/{product_id}", response_model=ProductoOut, name="actualizar_producto")
-def api_update_product(product_id: UUID, body: ProductoCreate):
+def api_update_product(product_id: int, body: ProductoCreate):
     return update_producto(product_id, body.model_dump())

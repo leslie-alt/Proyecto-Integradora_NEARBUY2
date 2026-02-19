@@ -13,7 +13,7 @@ def validar_fecha_creacion(value: datetime) -> datetime:
 class PedidoCreate(BaseModel):
     id_usuario: UUID
     total: float = Field(gt=0)
-    status: str = Field(min_length=3, max_length=50)
+    estatus: str = Field(min_length=3, max_length=50)
     metodo_pago: str = Field(min_length=3, max_length=50)
     codigo_qr: str | None = Field(default=None, max_length=200)
     fecha_creacion: datetime = Field(default_factory=datetime.now)
@@ -30,7 +30,7 @@ class PedidoCreate(BaseModel):
 class PedidoUpdate(BaseModel):
     id_usuario: UUID | None = Field(default=None)
     total: float | None = Field(default=None, gt=0)
-    status: str | None = Field(default=None, min_length=3, max_length=50)
+    estatus: str | None = Field(default=None, min_length=3, max_length=50)
     metodo_pago: str | None = Field(default=None, min_length=3, max_length=50)
     codigo_qr: str | None = Field(default=None, max_length=200)
     fecha_creacion: datetime | None = Field(default=None)
@@ -44,10 +44,10 @@ class PedidoUpdate(BaseModel):
 
 
 class PedidoOut(BaseModel):
-    id: UUID
-    id_usuario: UUID
+    id: int
+    id_usuario: int
     total: float
-    status: str
+    estatus: str
     metodo_pago: str
     codigo_qr: str | None = Field(default=None)
     fecha_creacion: datetime

@@ -3,6 +3,7 @@
 from pydantic import BaseModel, Field, field_validator
 from datetime import datetime, date
 from uuid import UUID
+from typing import Optional
 
 
 def validar_fecha_creacion(value: datetime) -> datetime:
@@ -12,16 +13,16 @@ def validar_fecha_creacion(value: datetime) -> datetime:
 
 
 class ProductoCreate(BaseModel):
-    id_categoria: UUID
+    id_categoria: int
     nombre: str = Field(min_length=3, max_length=200)
     descripcion: str | None = Field(default=None, max_length=300)
     precio: float = Field(gt=0)
     stock: int = Field(ge=0)
     imagen_url: str | None = Field(default=None, max_length=200)
-    tags: list[str] | None = Field(default=None)
-    activo: bool = Field(default=True)
+    tags: str | None = Field(default=None, max_length=300)
+    codigo: str | None = Field(default=None, max_length=50)
     fecha_creacion: datetime = Field(default_factory=datetime.now)
-
+    
 
     @field_validator("fecha_creacion")
     @classmethod
@@ -30,16 +31,16 @@ class ProductoCreate(BaseModel):
 
 
 class ProductoUpdate(BaseModel):
-    id_categoria: UUID | None = Field(default=None)
+    id_categoria: int | None = Field(default=None)
     nombre: str | None = Field(default=None, min_length=3, max_length=200)
     descripcion: str | None = Field(default=None, max_length=300)
     precio: float | None = Field(default=None, gt=0)
     stock: int | None = Field(default=None, ge=0)
     imagen_url: str | None = Field(default=None, max_length=200)
-    tags: list[str] | None = Field(default=None)
-    activo: bool | None = Field(default=None)
+    tags: str | None = Field(default=None, max_length=300)
+    codigo: str | None = Field(default=None, max_length=50)
     fecha_creacion: datetime | None = Field(default=None)
-
+    
     @field_validator("fecha_creacion")
     @classmethod
     def validar_fecha_creacion(cls, value: datetime | None) -> datetime | None:
@@ -50,16 +51,17 @@ class ProductoUpdate(BaseModel):
 
 
 class ProductoOut(BaseModel):
-    id: UUID
-    id_categoria: UUID
+    id: int
+    id_categoria: int
     nombre: str
     descripcion: str | None = Field(default=None)
     precio: float
     stock: int
     imagen_url: str | None = Field(default=None)
-    tags: list[str] | None = Field(default=None)
-    activo: bool
+    tags: str | None = Field(default=None)
+    codigo: str | None = Field(default=None)
     fecha_creacion: datetime
+    
     
     class Config:
         orm_mode = True

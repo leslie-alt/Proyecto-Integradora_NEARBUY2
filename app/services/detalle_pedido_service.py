@@ -17,45 +17,44 @@ def list_detalle_pedidos(skip: int = 0, limit: int = 100):
     
     try:
         res=_table().select("*", count=CountMethod.exact).range(skip, skip + limit - 1).execute()
-        if not res.data:
-            raise HTTPException(status_code=500, detail=f"Error al mostar los registros{e}")
-        return {"items": res.data , "total": res.count or 0}
+        return {"items": res.data or [], "total": res.count or 0}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al mostar los registros{e}")
     
-def get_detalle_pedido(detalle_pedido_id: UUID):
+def get_detalle_pedido(detalle_pedido_id: int):
     try:
         res=_table().select("*").eq("id", str(detalle_pedido_id)).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="Detalle pedido no encontrado")
-        return {"item": res.data[0] if res.data else None}
+        return res.data[0] if res.data else None
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al obtener el detalle pedido{e}")
     
 def create_detalle_pedido(datos: dict):
     try:
         if not datos:
-            raise HTTPException(status_code=500, detail=f"Error al crear el detalle pedido{e}")
+            raise HTTPException(status_code=500, detail=f"Error al crear el detalle pedido")
         datos=jsonable_encoder(datos)
         res=_table().insert(jsonable_encoder(datos)).execute()
         return res.data[0] if res.data else None
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al crear el detalle pedido{e}")
+        raise HTTPException(status_code=500, detail=f"Error al crear el detalle pedido")
     
-def update_detalle_pedido(detalle_pedido_id: UUID, datos: dict):
+
+def update_detalle_pedido(detalle_pedido_id: int, datos: dict):
     try:
         if not datos:
-            raise HTTPException(status_code=500, detail=f"Error al actualizar el detalle pedido{e}")
+            raise HTTPException(status_code=500, detail=f"Error al actualizar el detalle pedido")
         datos=jsonable_encoder(datos)
         res=_table().update(jsonable_encoder(datos)).eq("id", str(detalle_pedido_id)).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="Detalle pedido no encontrado")
         return res.data[0] if res.data else None
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al actualizar el detalle pedido{e}")
+        raise HTTPException(status_code=500, detail=f"Error al actualizar el detalle pedido")
     
-def delete_detalle_pedido(detalle_pedido_id: UUID):
+def delete_detalle_pedido(detalle_pedido_id: int):
     try:
         res=_table().delete().eq("id", str(detalle_pedido_id)).execute()
     except Exception as e:

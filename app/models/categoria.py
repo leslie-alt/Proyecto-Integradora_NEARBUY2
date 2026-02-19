@@ -30,7 +30,7 @@ class categoriaUpdate(BaseModel):
     
     
 class categoriaOut(BaseModel):
-    id: UUID
+    id: int
     nombre: str | None= Field(default=None, min_length=3, max_length=200) 
     descripcion: str | None= Field(default=None, min_length=3, max_length=200) 
     fecha_creacion: datetime | None = Field(default=None)

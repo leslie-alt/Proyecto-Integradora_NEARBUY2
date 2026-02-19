@@ -16,9 +16,7 @@ def list_perfil(skip: int = 0, limit: int = 100):
     
     try:
         res=_table().select("*", count=CountMethod.exact).range(skip, skip + limit - 1).execute()
-        if not res.data:
-            raise HTTPException(status_code=500, detail=f"Error al mostar los registros{e}")
-        return {"items": res.data , "total": res.count or 0}
+        return {"items": res.data or [], "total": res.count or 0}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al mostar los registros{e}")
     
@@ -27,33 +25,33 @@ def get_perfil(perfil_id: UUID):
         res=_table().select("*").eq("id", str(perfil_id)).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="perfil no encontrado")
-        return {"item": res.data[0] if res.data else None}
+        return res.data[0] if res.data else None
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al obtener el perfil{e}")
 
 def create_perfil(datos: dict):
     try:
         if not datos:
-            raise HTTPException(status_code=500, detail=f"Error al crear el perfil{e}")
+            raise HTTPException(status_code=500, detail=f"Error al crear el perfil")
         datos=jsonable_encoder(datos)
         res=_table().insert(jsonable_encoder(datos)).execute()
         return res.data[0] if res.data else None
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al crear el perfil{e}")
-    
+        raise HTTPException(status_code=500, detail=f"Error al crear el perfil")
 
 def update_perfil(perfil_id: UUID, datos: dict):
     try:
         if not datos:
-            raise HTTPException(status_code=500, detail=f"Error al actualizar el perfil{e}")
+            raise HTTPException(status_code=500, detail=f"Error al actualizar el perfil")
         datos=jsonable_encoder(datos)
         res=_table().update(jsonable_encoder(datos)).eq("id", str(perfil_id)).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="perfil no encontrado")
         return res.data[0] if res.data else None
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al actualizar el perfil{e}")
+         raise HTTPException(status_code=500, detail=f"Error al actualizar el perfil")
+    
     
 def delete_perfil(perfil_id: UUID):
     try:

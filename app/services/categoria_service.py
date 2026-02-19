@@ -15,45 +15,44 @@ def list_categoria(skip: int = 0, limit: int = 100):
     
     try:
         res=_table().select("*", count=CountMethod.exact).range(skip, skip + limit - 1).execute()
-        if not res.data:
-            raise HTTPException(status_code=500, detail=f"Error al mostar los registros{e}")
-        return {"items": res.data , "total": res.count or 0}
+        return {"items": res.data or [], "total": res.count or 0}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al mostar los registros{e}")
     
-def get_categoria(categoria_id: UUID):
+def get_categoria(categoria_id: int):
     try:
         res=_table().select("*").eq("id", str(categoria_id)).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="Categoria no encontrada")
-        return {"item": res.data[0] if res.data else None}
+        return res.data[0] if res.data else None
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al obtener la categoria{e}")
     
 def create_categoria(datos: dict):
     try:
         if not datos:
-            raise HTTPException(status_code=500, detail=f"Error al crear la categoria{e}")
+            raise HTTPException(status_code=500, detail=f"Error al crear la categoria")
         datos=jsonable_encoder(datos)
         res=_table().insert(jsonable_encoder(datos)).execute()
         return res.data[0] if res.data else None
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al crear la categoria{e}")
-
-def update_categoria(categoria_id: UUID, datos: dict):
+        raise HTTPException(status_code=500, detail=f"Error al crear la categoria")
+    
+def update_categoria(categoria_id: int, datos: dict):
     try:
         if not datos:
-            raise HTTPException(status_code=500, detail=f"Error al actualizar la categoria{e}")
+            raise HTTPException(status_code=500, detail=f"Error al actualizar la categoria")
         datos=jsonable_encoder(datos)
         res=_table().update(jsonable_encoder(datos)).eq("id", str(categoria_id)).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="Categoria no encontrada")
         return res.data[0] if res.data else None
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al actualizar la categoria{e}")
-    
-def delete_categoria(categoria_id: UUID):
+         raise HTTPException(status_code=500, detail=f"Error al actualizar la categoria")
+
+
+def delete_categoria(categoria_id: int):
     try:
         res=_table().delete().eq("id", str(categoria_id)).execute()
     except Exception as e:

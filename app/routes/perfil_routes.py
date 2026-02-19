@@ -12,7 +12,7 @@ def listar_perfiles(
     limit: int = Query(10, ge=1),
     offset: int = Query(0, ge=0)
 ):
-    return list_perfil(limit, offset)
+    return list_perfil(offset, limit)
 
 
 @router.get("/{perfil_id}", response_model=perfilOut, name="obtener_perfil")

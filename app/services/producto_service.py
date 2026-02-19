@@ -15,45 +15,45 @@ def list_producto(skip: int = 0, limit: int = 100):
     
     try:
         res=_table().select("*", count=CountMethod.exact).range(skip, skip + limit - 1).execute()
-        if not res.data:
-            raise HTTPException(status_code=500, detail=f"Error al mostar los registros{e}")
-        return {"items": res.data , "total": res.count or 0}
+        return {"items": res.data or [], "total": res.count or 0}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al mostar los registros{e}")
     
-def get_producto(producto_id: UUID):
+def get_producto(producto_id: int):
     try:
         res=_table().select("*").eq("id", str(producto_id)).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="Producto no encontrado")
-        return {"item": res.data[0] if res.data else None}
+        return res.data[0] if res.data else None
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al obtener el producto{e}")
 
 def create_producto(datos: dict):
     try:
         if not datos:
-            raise HTTPException(status_code=500, detail=f"Error al crear el producto{e}")
+            raise HTTPException(status_code=500, detail=f"Error al crear el producto")
         datos=jsonable_encoder(datos)
         res=_table().insert(jsonable_encoder(datos)).execute()
         return res.data[0] if res.data else None
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al crear el producto{e}")
-    
-def update_producto(producto_id: UUID, datos: dict):
+        raise HTTPException(status_code=500, detail=f"Error al crear el producto")
+                            
+
+def update_producto(producto_id: int, datos: dict):
     try:
         if not datos:
-            raise HTTPException(status_code=500, detail=f"Error al actualizar el producto{e}")
+            raise HTTPException(status_code=500, detail=f"Error al actualizar el producto")
         datos=jsonable_encoder(datos)
         res=_table().update(jsonable_encoder(datos)).eq("id", str(producto_id)).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="Producto no encontrado")
         return res.data[0] if res.data else None
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al actualizar el producto{e}")
+        raise HTTPException(status_code=500, detail=f"Error al actualizar el producto")
+    
 
-def delete_producto(producto_id: UUID):
+def delete_producto(producto_id: int):
     try:
         res=_table().delete().eq("id", str(producto_id)).execute()
     except Exception as e:

@@ -5,8 +5,8 @@ from uuid import UUID
 
 
 class detalle_pedidoCreate(BaseModel):
-    id_pedido: UUID
-    id_producto: UUID
+    id_pedido: int
+    id_producto: int
     cantidad: int = Field(gt=0)
     precio_unitario: float = Field(gt=0)
 
@@ -19,13 +19,11 @@ class detalle_pedidoUpdate(BaseModel):
     
     
 class detalle_pedidoOut(BaseModel):
-    id: UUID
-    id_pedido: UUID | None = Field(default=None)
-    id_producto: UUID | None = Field(default=None)
+    id: int
+    id_pedido: int | None = Field(default=None)
+    id_producto: int | None = Field(default=None)
     cantidad: int | None = Field(default=None, gt=0)
     precio_unitario: float | None = Field(default=None, gt=0)
-
-
     class Config:
         orm_mode = True
 
