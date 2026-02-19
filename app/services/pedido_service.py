@@ -8,7 +8,7 @@ from postgrest import CountMethod
 
 def _table():
     sb = get_supabase_client()
-    return sb.table(config.supabase_table)
+    return sb.table("pedidos")
 
 def list_pedidos(skip: int = 0, limit: int = 100):
     try:

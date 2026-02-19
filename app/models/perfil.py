@@ -3,42 +3,48 @@ from datetime import datetime
 from uuid import UUID
 from typing import Optional, List
 
-def validar_fecha_ingreso(value: datetime) -> datetime:
-    # funcion para validar que la fecha de ingreso no sea mayor a la fecha actual
+def validar_fecha_registro(value: datetime) -> datetime:
+    # funcion para validar que la fecha de registro no sea mayor a la fecha actual
     if value > datetime.now():
-        raise ValueError("La fecha de ingreso   no puede ser mayor a la fecha actual.")
+        raise ValueError("La fecha de registro no puede ser mayor a la fecha actual.")
     return value
 
 class perfilCreate(BaseModel):
-    nombre_completo: str = Field(min_length=3, max_length=100)
-    telefono: str = Field(min_length=7, max_length=15)
-    fecha_ingreso: datetime = Field(default_factory=datetime.now)
+    nombre_usuario: str = Field(min_length=3, max_length=50)
+    telefono: str = Field(min_length=10, max_length=15)
+    fecha_registro: datetime = Field(default_factory=datetime.now)
     rol: str = Field(min_length=3, max_length=50)
+    contrasena: str = Field(min_length=6)
 
-    @field_validator("fecha_ingreso")
+
+   
+    @field_validator("fecha_registro")
     @classmethod
-    def validar_fecha_ingreso(cls, value: datetime) -> datetime:
-        return validar_fecha_ingreso(value)
+    def validar_fecha_registro(cls, value: datetime) -> datetime:
+        return validar_fecha_registro(value)
 
 
 class perfilUpdate(BaseModel):
-    perfilname: str | None = Field(default=None, min_length=3, max_length=50)
-    email: str | None = Field(default=None, min_length=5, max_length=150)
-    password: str | None = Field(default=None, min_length=6)
+    nombre_usuario: str | None = Field(default=None, min_length=3, max_length=50)
+    telefono: str | None = Field(default=None, min_length=10, max_length=15)
+    fecha_registro: datetime | None = Field(default=None)
+    rol: str | None = Field(default=None, min_length=3, max_length=50)
+    contrasena: str | None = Field(default=None, min_length=6)
 
     
-    @field_validator("fecha_ingreso")
+    @field_validator("fecha_registro")
     @classmethod
-    def validar_fecha_ingreso(cls, value: datetime) -> datetime:
-        return validar_fecha_ingreso(value)
+    def validar_fecha_registro(cls, value: datetime) -> datetime:
+        return validar_fecha_registro(value)
 
 
 class perfilOut(BaseModel):
     id: UUID
-    perfilname: str
-    email: str
-    created_at: datetime
-    updated_at: datetime
+    nombre_usuario: str
+    telefono: str
+    fecha_registro: datetime
+    rol: str
+    contrasena: str
 
     class Config:
         orm_mode = True

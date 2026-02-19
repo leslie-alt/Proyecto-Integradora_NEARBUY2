@@ -1,8 +1,9 @@
-from fastapi import HTTPException, status
+from fastapi import Request
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 
-def not_found(entity: str):
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"{entity} no encontrado"
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=422,
+        content={"detail": exc.errors()}
     )
-

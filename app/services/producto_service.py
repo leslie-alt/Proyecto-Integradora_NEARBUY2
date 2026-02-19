@@ -9,9 +9,9 @@ from postgrest import CountMethod
 
 def _table():
     sb = get_supabase_client()
-    return sb.table(config.supabase_table)
+    return sb.table("productos")  #nombre de la tabla en supabase
 
-def list_categorias(skip: int = 0, limit: int = 100):
+def list_producto(skip: int = 0, limit: int = 100):
     
     try:
         res=_table().select("*", count=CountMethod.exact).range(skip, skip + limit - 1).execute()
@@ -21,40 +21,40 @@ def list_categorias(skip: int = 0, limit: int = 100):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al mostar los registros{e}")
     
-def get_categoria(categoria_id: UUID):
+def get_producto(producto_id: UUID):
     try:
-        res=_table().select("*").eq("id", str(categoria_id)).execute()
+        res=_table().select("*").eq("id", str(producto_id)).execute()
         if not res.data:
-            raise HTTPException(status_code=404, detail="Categoria no encontrada")
+            raise HTTPException(status_code=404, detail="Producto no encontrado")
         return {"item": res.data[0] if res.data else None}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al obtener la categoria{e}")
+        raise HTTPException(status_code=500, detail=f"Error al obtener el producto{e}")
 
-def create_categoria(datos: dict):
+def create_producto(datos: dict):
     try:
         if not datos:
-            raise HTTPException(status_code=500, detail=f"Error al crear la categoria{e}")
+            raise HTTPException(status_code=500, detail=f"Error al crear el producto{e}")
         datos=jsonable_encoder(datos)
         res=_table().insert(jsonable_encoder(datos)).execute()
         return res.data[0] if res.data else None
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al crear la categoria{e}")
+        raise HTTPException(status_code=500, detail=f"Error al crear el producto{e}")
     
-def update_categoria(categoria_id: UUID, datos: dict):
+def update_producto(producto_id: UUID, datos: dict):
     try:
         if not datos:
-            raise HTTPException(status_code=500, detail=f"Error al actualizar la categoria{e}")
+            raise HTTPException(status_code=500, detail=f"Error al actualizar el producto{e}")
         datos=jsonable_encoder(datos)
-        res=_table().update(jsonable_encoder(datos)).eq("id", str(categoria_id)).execute()
+        res=_table().update(jsonable_encoder(datos)).eq("id", str(producto_id)).execute()
         if not res.data:
-            raise HTTPException(status_code=404, detail="Categoria no encontrada")
+            raise HTTPException(status_code=404, detail="Producto no encontrado")
         return res.data[0] if res.data else None
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al actualizar la categoria{e}")
+        raise HTTPException(status_code=500, detail=f"Error al actualizar el producto{e}")
 
-def delete_categoria(categoria_id: UUID):
+def delete_producto(producto_id: UUID):
     try:
-        res=_table().delete().eq("id", str(categoria_id)).execute()
+        res=_table().delete().eq("id", str(producto_id)).execute()
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al eliminar la categoria{e}")
+        raise HTTPException(status_code=500, detail=f"Error al eliminar el producto  {e}")

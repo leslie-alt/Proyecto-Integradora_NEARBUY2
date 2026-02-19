@@ -5,13 +5,13 @@ from datetime import date
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 from app.core.supabase_client import get_supabase_client
-from app.core.config import config
+#from app.core.config import config
 from postgrest import CountMethod
 
 
 def _table():
     sb = get_supabase_client()
-    return sb.table(config.supabase_table)
+    return sb.table("detalle_pedido")
 
 def list_detalle_pedidos(skip: int = 0, limit: int = 100):
     

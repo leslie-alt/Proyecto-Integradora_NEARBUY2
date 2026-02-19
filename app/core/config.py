@@ -7,7 +7,7 @@ class Config(BaseSettings):  #hereda de BaseSettings
     supabase_url: str = Field(default="", alias="SUPABASE_URL")
     supabase_key: str = Field(default="", alias="SUPABASE_KEY")
     supabase_schema: str = Field(default="public", alias="SUPABASE_SCHEMA")
-    supabase_table: str = Field(default="producto", alias="SUPABASE_TABLE")
+    #supabase_table_producro: str = Field(default="producto", alias="SUPABASE_TABLE")
     allowed_origins: list[str] = Field(default=[], alias="ALLOWED_ORIGINS")
     
 

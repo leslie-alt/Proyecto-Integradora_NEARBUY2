@@ -9,8 +9,8 @@ router = APIRouter(prefix="/perfil", tags=["perfil"])
 @router.get("", name="listar_perfil")
 @router.get("/", name="listar_perfiles_slash")
 def listar_perfiles(
-    limit: int = Query(100, ge=1, le=200),
-    offset: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1),
+    offset: int = Query(0, ge=0)
 ):
     return list_perfil(limit, offset)
 

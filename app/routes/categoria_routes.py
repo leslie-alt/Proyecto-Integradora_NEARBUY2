@@ -1,14 +1,15 @@
 
 from fastapi import APIRouter, Path, Query
 from uuid import UUID
-from app.models.producto import categoriaCreate, categoriaOut, categoriaUpdate, categoriaList, OnecategoriaOut
+from app.models.categoria import categoriaCreate, categoriaOut, categoriaUpdate, categoriaList, OnecategoriaOut
 from app.services.categoria_service import create_categoria, get_categoria, list_categoria, delete_categoria, update_categoria
 
 router = APIRouter(prefix="/categorias", tags=["categorias"])
 
 @router.post("", name="listar categorias", response_model=categoriaOut)
 @router.get("/", name="listar_categorias_slash")
-def listar_categorias(limit: int = Query(0, ge=0), offset: int = Query(100, ge=1)):
+def listar_categorias(limit: int = Query(10, ge=1),
+    offset: int = Query(0, ge=0)):
     return list_categoria(limit, offset)
 
 @router.get("/{categoria_id}", name="obtener categoria", response_model=categoriaOut)

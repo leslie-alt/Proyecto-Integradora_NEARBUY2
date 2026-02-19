@@ -10,7 +10,7 @@ from postgrest import CountMethod
 
 def _table():
     sb = get_supabase_client()
-    return sb.table(config.supabase_table)
+    return sb.table("perfiles")
 
 def list_perfil(skip: int = 0, limit: int = 100):
     
